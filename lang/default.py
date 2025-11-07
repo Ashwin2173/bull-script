@@ -30,6 +30,14 @@ class Integer : BASE_CLASS {
     std::string toString() {
         return std::to_string(this->value);
     }
+    Object* add(Object* other) {
+        if (auto intObj = dynamic_cast<Integer*>(other)) {
+            return new Integer(value + intObj->value);
+        } else {
+            std::cout << "invalid usage of + for " << other->getType() << std::endl;
+            std::exit(1);
+        }
+    }
 };"""
 PRINT = """
 void print(Object* data) {
