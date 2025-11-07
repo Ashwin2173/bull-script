@@ -1,0 +1,27 @@
+# Ignore compiled output
+*.o
+*.lo
+*.la
+*.dll
+*.exe
+*.obj
+*.lib
+
+# Ignore temporary files
+*~
+*.tmp
+*.bak
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files (example for Visual Studio)
+.vs/
+*.suo
+*.user
+*.pdb
+*.intellisense
+
+# Ignore environment variables
+.env

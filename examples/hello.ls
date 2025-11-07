@@ -1,0 +1,3 @@
+define main() {
+    -x + 1;
+}
