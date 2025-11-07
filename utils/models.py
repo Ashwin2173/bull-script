@@ -21,7 +21,7 @@ class Expression(BaseClass):
         self.expression = expression
         super().__init__(_type, line)
 
-    def expression(self):
+    def get_expression(self):
         return self.expression
 
 class BinaryExpression(BaseClass):
@@ -33,6 +33,9 @@ class BinaryExpression(BaseClass):
 
     def get_left(self):
         return self.left
+
+    def get_operation(self):
+        return self.operator
 
     def get_right(self):
         return self.right
