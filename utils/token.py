@@ -1,6 +1,6 @@
 from utils.tokentype import TokenType, to_string
 
-from lang.exceptions import LunaException
+from lang.exceptions import BullException
 
 class Token:
     def __init__(self, raw, _type, line):
@@ -20,7 +20,7 @@ class Token:
     def match(self, *others):
         if self._type not in others:
             others = [to_string(other).lower() for other in others]
-            raise LunaException(f"Expected {' or '.join(others)}, but got {self.raw}")
+            raise BullException(f"Expected {' or '.join(others)}, but got {self.raw}")
         return self
 
     def contains(self, *items):

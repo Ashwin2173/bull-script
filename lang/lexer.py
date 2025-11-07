@@ -43,50 +43,41 @@ class Lexer:
             return self.get_token_operator(chunk['OPERATOR'])
         elif chunk['IDENTIFIER'] is not None:
             return self.get_token_identifier(chunk['IDENTIFIER'])
-        print(chunk)
         print("[ERROR] fault at core ( code: TTY )")
         sys.exit(1)
 
     def get_token_operator(self, raw_chunk):
-        if raw_chunk == '(':
-            return Token(raw_chunk, TokenType.OPEN_PARAM, self.line)
-        elif raw_chunk == ')':
-            return Token(raw_chunk, TokenType.CLOSE_PARAM, self.line)
-        elif raw_chunk == '{':
-            return Token(raw_chunk, TokenType.OPEN_BRACE, self.line)
-        elif raw_chunk == '}':
-            return Token(raw_chunk, TokenType.CLOSE_BRACE, self.line)
-        elif raw_chunk == ';':
-            return Token(raw_chunk, TokenType.SEMICOLON, self.line)
-        elif raw_chunk == '!':
-            return Token(raw_chunk, TokenType.NOT, self.line)
-        elif raw_chunk == '+':
-            return Token(raw_chunk, TokenType.PLUS, self.line)
-        elif raw_chunk == '-':
-            return Token(raw_chunk, TokenType.MINUS, self.line)
-        elif raw_chunk == '*':
-            return Token(raw_chunk, TokenType.STAR, self.line)
-        elif raw_chunk == '/':
-            return Token(raw_chunk, TokenType.SLASH, self.line)
-        elif raw_chunk == '>':
-            return Token(raw_chunk, TokenType.GREATER, self.line)
-        elif raw_chunk == '<':
-            return Token(raw_chunk, TokenType.LESSER, self.line)
-        elif raw_chunk == '>=':
-            return Token(raw_chunk, TokenType.GREATER_EQUAL, self.line)
-        elif raw_chunk == '<=':
-            return Token(raw_chunk, TokenType.LESSER_EQUAL, self.line)
-        elif raw_chunk == '==':
-            return Token(raw_chunk, TokenType.EQUAL_EQUAL, self.line)
-        elif raw_chunk == '!=':
-            return Token(raw_chunk, TokenType.BANG_EQUAL, self.line)
-        print("[ERROR] fault at core ( code: TTO )")
-        sys.exit(1)
+        token_map = {
+            '(': TokenType.OPEN_PARAM,
+            ')': TokenType.CLOSE_PARAM,
+            '{': TokenType.OPEN_BRACE,
+            '}': TokenType.CLOSE_BRACE,
+            ';': TokenType.SEMICOLON,
+            '!': TokenType.NOT,
+            '+': TokenType.PLUS,
+            '-': TokenType.MINUS,
+            '*': TokenType.STAR,
+            '/': TokenType.SLASH,
+            '>': TokenType.GREATER,
+            '<': TokenType.LESSER,
+            '>=': TokenType.GREATER_EQUAL,
+            '<=': TokenType.LESSER_EQUAL,
+            '==': TokenType.EQUAL_EQUAL,
+            '!=': TokenType.BANG_EQUAL,
+        }
+        token_type = token_map.get(raw_chunk)
+        if token_type is None:
+            print("[ERROR] fault at core ( code: TTO )")
+            sys.exit(1)
+        return Token(raw_chunk, token_type, self.line)
 
     def get_token_identifier(self, raw_chunk):
-        if raw_chunk == 'define':
-            return Token(raw_chunk, TokenType.KW_DEFINE, self.line)
-        elif raw_chunk == 'return':
-            return Token(raw_chunk, TokenType.KW_RETURN, self.line)
+        keyword_map = {
+            'define': TokenType.KW_DEFINE,
+            'return': TokenType.KW_RETURN
+        }
+        keyword_type = keyword_map.get(raw_chunk)
+        if keyword_type is not None:
+            return Token(raw_chunk, keyword_type, self.line)
         else:
             return Token(raw_chunk, TokenType.ID, self.line)

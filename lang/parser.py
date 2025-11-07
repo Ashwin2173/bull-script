@@ -3,7 +3,7 @@ import sys
 from utils.generator import Generator
 from utils.tokentype import TokenType, to_string
 from utils.statement_type import StatementType
-from lang.exceptions import LunaException
+from lang.exceptions import BullException
 from utils.models import *
 
 class Parser:
@@ -53,7 +53,7 @@ class Parser:
         return statement
 
     def __return_statement(self):
-        self.tokens.get().match(TokenType.KW_RETURN)
+        self.tokens.next()
         expression = self.__expression()
         return ReturnStatement(expression, StatementType.RETURN_STATEMENT, expression.get_line())
 
@@ -68,7 +68,7 @@ class Parser:
             self.tokens.next()
             right_expression = self.__logical_or()
             if left_expression.get_type() != StatementType.ID:
-                raise LunaException("cannot assign to an expression")
+                raise BullException("cannot assign to an expression")
             left_expression = BinaryExpression(left_expression, token.get_raw(),
                                     right_expression, StatementType.BINARY_EXPRESSION, token.get_line())
         return left_expression
@@ -156,4 +156,4 @@ class Parser:
         elif token == TokenType.ID:
             return Literal(token.get_raw(), StatementType.ID, token.get_line())
         else:
-            raise LunaException("Invalid expression")
+            raise BullException("Invalid expression, " + token.get_raw())

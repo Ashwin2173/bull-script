@@ -17,6 +17,8 @@
 Thumbs.db
 
 # Ignore IDE-specific files (example for Visual Studio)
+.venv/
+.idea/
 .vs/
 *.suo
 *.user
