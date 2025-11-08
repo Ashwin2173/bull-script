@@ -31,6 +31,7 @@ class TokenType(Enum):
 
     KW_DEFINE = auto()
     KW_RETURN = auto()
+    KW_VAR = auto()
 
 def to_string(token_type):
     for attr in dir(TokenType):

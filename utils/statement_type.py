@@ -13,3 +13,4 @@ class StatementType(Enum):
 
     RETURN_STATEMENT = auto()
     FUNCTION_DECLARATION = auto()
+    VARIABLE_EXPRESSION = auto()

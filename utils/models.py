@@ -15,6 +15,18 @@ class Program:
 
     def get_definitions(self):
         return self.definitions
+
+class VariableDeclaration(BaseClass):
+    def __init__(self, name, expression, _type, line):
+        self.name = name
+        self.expression = expression
+        super().__init__(_type, line)
+
+    def get_name(self):
+        return self.name
+
+    def get_expression(self):
+        return self.expression
     
 class Expression(BaseClass):
     def __init__(self, expression, _type, line):

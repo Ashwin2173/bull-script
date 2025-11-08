@@ -39,6 +39,8 @@ class Lexer:
             return Token(chunk['STRING'], TokenType.STRING, self.line)
         elif chunk['INTEGER'] is not None:
             return Token(chunk['INTEGER'], TokenType.INTEGER, self.line)
+        elif chunk['FLOAT'] is not None:
+            return Token(chunk['FLOAT'], TokenType.DOUBLE, self.line)
         elif chunk['OPERATOR'] is not None:
             return self.get_token_operator(chunk['OPERATOR'])
         elif chunk['IDENTIFIER'] is not None:
@@ -60,6 +62,7 @@ class Lexer:
             '/': TokenType.SLASH,
             '>': TokenType.GREATER,
             '<': TokenType.LESSER,
+            '=': TokenType.EQUAL,
             '>=': TokenType.GREATER_EQUAL,
             '<=': TokenType.LESSER_EQUAL,
             '==': TokenType.EQUAL_EQUAL,
@@ -74,7 +77,8 @@ class Lexer:
     def get_token_identifier(self, raw_chunk):
         keyword_map = {
             'define': TokenType.KW_DEFINE,
-            'return': TokenType.KW_RETURN
+            'return': TokenType.KW_RETURN,
+            'var': TokenType.KW_VAR
         }
         keyword_type = keyword_map.get(raw_chunk)
         if keyword_type is not None:

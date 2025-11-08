@@ -28,6 +28,10 @@ class Parser:
             statement = self.__return_statement()
             self.tokens.get().match(TokenType.SEMICOLON)
             return statement
+        elif token.get_type() == TokenType.KW_VAR:
+            statement = self.__var_statement()
+            self.tokens.get().match(TokenType.SEMICOLON)
+            return statement
         else:
             expression = self.__expression()
             self.tokens.get().match(TokenType.SEMICOLON)
@@ -51,6 +55,14 @@ class Parser:
             statement.append(self.__parse_statement())
         self.tokens.get().match(TokenType.CLOSE_BRACE)
         return statement
+
+    def __var_statement(self):
+        self.tokens.next()
+        name = self.tokens.get()
+        self.tokens.next().match(TokenType.EQUAL)
+        self.tokens.next()
+        expression = self.__logical_or()
+        return VariableDeclaration(name.get_raw(), expression, StatementType.VARIABLE_EXPRESSION, name.get_line())
 
     def __return_statement(self):
         self.tokens.next()
@@ -150,7 +162,7 @@ class Parser:
         if token == TokenType.INTEGER:
             return Literal(token.get_raw(), StatementType.INTEGER_LITERAL, token.get_line())
         elif token == TokenType.STRING:
-            return Literal(token.get_raw(), StatementType.DOUBLE_LITERAL, token.get_line())
+            return Literal(token.get_raw(), StatementType.STRING_LITERAL, token.get_line())
         elif token == TokenType.DOUBLE:
             return Literal(token.get_raw(), StatementType.DOUBLE_LITERAL, token.get_line())
         elif token == TokenType.ID:

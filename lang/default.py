@@ -39,6 +39,25 @@ class Integer : BASE_CLASS {
         }
     }
 };"""
+DOUBLE = """
+class Double : BASE_CLASS {
+    long double value;
+    public:
+    Double(long double value) : value(value) { Object::setType("Double"); }
+
+    std::string toString() {
+        return std::to_string(value);
+    }
+};"""
+STRING = """
+class String : BASE_CLASS {
+    std::string value;
+    public:
+    String(std::string value) : value(value) { Object::setType("String"); }
+    std::string toString() {
+        return this->value;
+    }
+};"""
 PRINT = """
 void print(Object* data) {
     std::cout << data->toString() << std::endl;
@@ -46,6 +65,6 @@ void print(Object* data) {
 MAIN_FUNCTION = """
 int main() {
 Object* value = main_();
-print(value);
+std::cout << "Exited with exit code " << value->toString() << std::endl;
 return 0;
 }"""
