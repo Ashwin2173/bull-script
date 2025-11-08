@@ -69,6 +69,18 @@ class Literal(BaseClass):
     def get_value(self):
         return self.value
 
+class FunctionCall(BaseClass):
+    def __init__(self, name, param, _type, line):
+        self.name = name
+        self.param = param
+        super().__init__(_type, line)
+
+    def get_name(self):
+        return self.name
+
+    def get_param(self):
+        return self.param
+
 class ReturnStatement(BaseClass):
     def __init__(self, expression, _type, line):
         self.expression = expression

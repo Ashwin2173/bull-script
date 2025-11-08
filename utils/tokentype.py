@@ -11,6 +11,7 @@ class TokenType(Enum):
     OPEN_BRACE = auto()
     CLOSE_BRACE = auto()
     SEMICOLON = auto()
+    COMMA = auto()
 
     PLUS = auto()
     MINUS = auto()

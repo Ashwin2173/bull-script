@@ -11,6 +11,6 @@ class Generator:
             self.pointer += offset
         return self.get()
 
-    def get(self):
-        if 0 <= self.pointer < len(self._list):
-            return self._list[self.pointer]
+    def get(self, offset=0):
+        if 0 <= self.pointer + offset < len(self._list):
+            return self._list[self.pointer + offset]

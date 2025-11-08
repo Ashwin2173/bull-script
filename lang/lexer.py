@@ -55,6 +55,7 @@ class Lexer:
             '{': TokenType.OPEN_BRACE,
             '}': TokenType.CLOSE_BRACE,
             ';': TokenType.SEMICOLON,
+            ',': TokenType.COMMA,
             '!': TokenType.NOT,
             '+': TokenType.PLUS,
             '-': TokenType.MINUS,

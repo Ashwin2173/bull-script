@@ -42,6 +42,9 @@ class Compiler:
                 self.__process_return_statement(statement)
             elif statement.get_type() == StatementType.VARIABLE_EXPRESSION:
                 self.__process_variable_declaration(statement)
+            elif statement.get_type() == StatementType.EXPRESSION_STATEMENT:
+                self.builder.add(self.__process_expression(statement))
+                self.builder.add(";")
             else:
                 print("[ERROR] unhandled statement")
                 sys.exit(1)
@@ -67,9 +70,16 @@ class Compiler:
             return self.__process_literal(expression)
         elif expression.get_type() == StatementType.BINARY_EXPRESSION:
             return self.__process_binary_statement(expression)
+        elif expression.get_type() == StatementType.FUNCTION_CALL:
+            return self.__process_function_call(expression)
         else:
             print("[ERROR] unhandled expression", expression.get_type())
             sys.exit(1)
+
+    def __process_function_call(self, expression):
+        name = expression.get_name()
+        param = [self.__process_expression(p) for p in expression.get_param()]
+        return f"{name}({', '.join(param)})"
 
     def __process_binary_statement(self, expression):
         operation_map = {

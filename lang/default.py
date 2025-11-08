@@ -21,7 +21,8 @@ class Object {
       std::cout << this->type + " is not iterable" << std::endl;
       std::exit(1);
       }
-};"""
+};
+class String; class Double; class Integer;"""
 INTEGER = """
 class Integer : BASE_CLASS {
     long long value;
@@ -34,7 +35,7 @@ class Integer : BASE_CLASS {
         if (auto intObj = dynamic_cast<Integer*>(other)) {
             return new Integer(value + intObj->value);
         } else {
-            std::cout << "invalid usage of + for " << other->getType() << std::endl;
+            std::cout << "invalid usage of + with " << other->getType() << std::endl;
             std::exit(1);
         }
     }

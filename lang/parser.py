@@ -166,6 +166,20 @@ class Parser:
         elif token == TokenType.DOUBLE:
             return Literal(token.get_raw(), StatementType.DOUBLE_LITERAL, token.get_line())
         elif token == TokenType.ID:
+            next_token = self.tokens.get()
+            if next_token == TokenType.OPEN_PARAM:
+                return FunctionCall(token.get_raw(), self.__parse_function_param(),
+                                    StatementType.FUNCTION_CALL, token.get_line())
             return Literal(token.get_raw(), StatementType.ID, token.get_line())
         else:
             raise BullException("Invalid expression, " + token.get_raw())
+
+    def __parse_function_param(self):
+        param = list()
+        self.tokens.next()
+        while not self.tokens.get().contains(TokenType.CLOSE_PARAM):
+            param.append(self.__logical_or())
+            if not self.tokens.get().contains(TokenType.CLOSE_PARAM):
+                self.tokens.get().match(TokenType.COMMA)
+        self.tokens.next()
+        return param
