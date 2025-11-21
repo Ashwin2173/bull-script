@@ -10,6 +10,7 @@ class StatementType(Enum):
     INTEGER_LITERAL = auto()
     STRING_LITERAL = auto()
     DOUBLE_LITERAL = auto()
+    BOOLEAN_LITERAL = auto()
 
     RETURN_STATEMENT = auto()
     FUNCTION_DECLARATION = auto()

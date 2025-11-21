@@ -29,6 +29,14 @@ class Object {
       std::cout << "Invalid usage of / for " << getType() << " and " << rightHand->getType() << std::endl;
       std::exit(1);
     }
+    virtual Object* equals(Object* rightHand) {
+      std::cout << "Invalid usage of = for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* negate() {
+      std::cout << "Can't negate " << getType() << std::endl;
+      std::exit(1);
+    }
     virtual std::vector<Object*> getIterable() {
       std::cout << this->type + " is not iterable" << std::endl;
       std::exit(1);
@@ -41,6 +49,7 @@ class Integer : BASE_CLASS {
     long long value;
     Integer(long long value) : value(value) { Object::setType("Integer"); }
     std::string toString() { return std::to_string(this->value); }
+    Object* negate() override { return new Integer(-this->value); }
     Object* add(Object*) override;
     Object* sub(Object*) override;
     Object* mul(Object*) override;
@@ -52,6 +61,7 @@ class Double : BASE_CLASS {
     long double value;
     Double(long double value) : value(value) { Object::setType("Double"); }
     std::string toString() { return std::to_string(value); }
+    Object* negate() override { return new Double(-this->value); }
     Object* add(Object*) override;
     Object* sub(Object*) override;
     Object* mul(Object*) override;
@@ -64,6 +74,13 @@ class String : BASE_CLASS {
     String(std::string value) : value(value) { Object::setType("String"); }
     std::string toString() { return this->value; }
     Object* add(Object*) override;
+};"""
+BOOLEAN = """
+class Boolean : BASE_CLASS {
+    public:
+    bool value;
+    Boolean(bool value) : value(value) { Object:: setType("Boolean"); }
+    std::string toString() { return value ? "true" : "false"; }
 };"""
 DEFAULT_TYPE_POST_FUNCTION = """
 Object* String::add(Object* other) { 

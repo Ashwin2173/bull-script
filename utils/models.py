@@ -58,6 +58,9 @@ class Unary(BaseClass):
         self.right = right
         super().__init__(_type, line)
 
+    def get_operator(self):
+        return self.operator
+
     def get_right(self):
         return self.right
 

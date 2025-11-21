@@ -1,4 +1,4 @@
 define main() {
-    print(10 / 3.0);
+    print(true);
     return 0;
 }

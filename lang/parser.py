@@ -1,4 +1,5 @@
 import sys
+from token import tok_name
 
 from utils.generator import Generator
 from utils.tokentype import TokenType, to_string
@@ -165,6 +166,8 @@ class Parser:
             return Literal(token.get_raw(), StatementType.STRING_LITERAL, token.get_line())
         elif token == TokenType.DOUBLE:
             return Literal(token.get_raw(), StatementType.DOUBLE_LITERAL, token.get_line())
+        elif token == TokenType.KW_TRUE or token == TokenType.KW_FALSE:
+            return Literal(token.get_raw(), StatementType.BOOLEAN_LITERAL, token.get_line())
         elif token == TokenType.ID:
             next_token = self.tokens.get()
             if next_token == TokenType.OPEN_PARAM:

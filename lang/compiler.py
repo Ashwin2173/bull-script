@@ -65,11 +65,13 @@ class Compiler:
     def __process_expression(self, expression):
         if expression.get_type() == StatementType.EXPRESSION_STATEMENT:
             return self.__process_expression(expression.get_expression())
-        elif expression.get_type() in {StatementType.INTEGER_LITERAL, StatementType.STRING_LITERAL,
-                                       StatementType.DOUBLE_LITERAL, StatementType.ID}:
+        elif expression.get_type() in {StatementType.INTEGER_LITERAL, StatementType.STRING_LITERAL, StatementType.DOUBLE_LITERAL,
+                                       StatementType.BOOLEAN_LITERAL, StatementType.ID}:
             return self.__process_literal(expression)
         elif expression.get_type() == StatementType.BINARY_EXPRESSION:
             return self.__process_binary_statement(expression)
+        elif expression.get_type() == StatementType.UNARY_EXPRESSION:
+            return self.__process_unary_statement(expression)
         elif expression.get_type() == StatementType.FUNCTION_CALL:
             return self.__process_function_call(expression)
         else:
@@ -87,10 +89,18 @@ class Compiler:
             TokenType.MINUS: '->sub',
             TokenType.STAR:  '->mul',
             TokenType.SLASH: '->div',
+            TokenType.EQUAL_EQUAL: '->equals'
         }
         return (self.__process_expression(expression.get_left()) +
                 operation_map[expression.get_operation()] + "(" +
                 self.__process_expression(expression.get_right()) + ")")
+
+    def __process_unary_statement(self, expression):
+        if expression.get_operator() == TokenType.MINUS:
+            return f"({self.__process_expression(expression.get_right())}->negate())"
+        else:
+            print("0xDEAD")
+            sys.exit(1)
 
     def __process_literal(self, expression):
         if expression.get_type() == StatementType.INTEGER_LITERAL:
@@ -99,6 +109,8 @@ class Compiler:
             return f"(new String({expression.get_value()}))"
         elif expression.get_type() == StatementType.DOUBLE_LITERAL:
             return f"(new Double({expression.get_value()}L))"
+        elif expression.get_type() == StatementType.BOOLEAN_LITERAL:
+            return f"(new Boolean({expression.get_value()}))"
         elif expression.get_type() == StatementType.ID:
             return expression.get_value()
         else:
@@ -112,6 +124,7 @@ class Compiler:
         self.builder.add(default.INTEGER)
         self.builder.add(default.STRING)
         self.builder.add(default.DOUBLE)
+        self.builder.add(default.BOOLEAN)
         self.builder.add(default.DEFAULT_TYPE_POST_FUNCTION)
         self.builder.add(default.DEFAULT_FUNCTIONS)
 

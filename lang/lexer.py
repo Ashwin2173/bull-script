@@ -79,6 +79,8 @@ class Lexer:
         keyword_map = {
             'define': TokenType.KW_DEFINE,
             'return': TokenType.KW_RETURN,
+            'true': TokenType.KW_TRUE,
+            'false': TokenType.KW_FALSE,
             'var': TokenType.KW_VAR
         }
         keyword_type = keyword_map.get(raw_chunk)
