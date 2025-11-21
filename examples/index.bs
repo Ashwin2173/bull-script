@@ -1,4 +1,8 @@
+define test() {
+    return 10;
+}
+
 define main() {
-    print("Hello, World");
+    print(test() + 1); // output: 11
     return 0;
 }

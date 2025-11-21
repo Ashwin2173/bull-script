@@ -14,7 +14,7 @@ class Object {
     }
     virtual std::string getType() final { return this->type; }
     virtual Object* add(Object* rightHand) {
-      std::cout << "Invalid expression operation" << std::endl;
+      std::cout << "Invalid usage of + for " << getType() << " and " << rightHand->getType() << std::endl;
       std::exit(1);
     }
     virtual std::vector<Object*> getIterable() {
@@ -25,41 +25,60 @@ class Object {
 class String; class Double; class Integer;"""
 INTEGER = """
 class Integer : BASE_CLASS {
-    long long value;
     public:
+    long long value;
     Integer(long long value) : value(value) { Object::setType("Integer"); }
-    std::string toString() {
-        return std::to_string(this->value);
-    }
-    Object* add(Object* other) {
-        if (auto intObj = dynamic_cast<Integer*>(other)) {
-            return new Integer(value + intObj->value);
-        } else {
-            std::cout << "invalid usage of + with " << other->getType() << std::endl;
-            std::exit(1);
-        }
-    }
+    std::string toString() { return std::to_string(this->value); }
+    Object* add(Object*) override;
 };"""
 DOUBLE = """
 class Double : BASE_CLASS {
-    long double value;
     public:
+    long double value;
     Double(long double value) : value(value) { Object::setType("Double"); }
-
-    std::string toString() {
-        return std::to_string(value);
-    }
+    std::string toString() { return std::to_string(value); }
+    Object* add(Object*) override;
 };"""
 STRING = """
 class String : BASE_CLASS {
-    std::string value;
     public:
+    std::string value;
     String(std::string value) : value(value) { Object::setType("String"); }
-    std::string toString() {
-        return this->value;
-    }
+    std::string toString() { return this->value; }
+    Object* add(Object*) override;
 };"""
-PRINT = """
+DEFAULT_TYPE_POST_FUNCTION = """
+Object* String::add(Object* other) { 
+    if (auto obj = dynamic_cast<String*>(other)) {
+        return new String(value + obj->value);
+    } else if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new String(value + obj->toString());
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new String(value + obj->toString());
+    }
+    return Object::add(other);
+}
+Object* Integer::add(Object* other) {
+    if (auto obj = dynamic_cast<String*>(other)) {
+        return new String(this->toString() + obj->value);
+    } else if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Integer(value + obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value + obj->value);
+    }
+    return Object::add(other);
+}
+Object* Double::add(Object* other) {
+    if (auto obj = dynamic_cast<String*>(other)) {
+        return new String(this->toString() + obj->value);
+    } else if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Double(value + obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value + obj->value);
+    }
+    return Object::add(other);
+}"""
+DEFAULT_FUNCTIONS = """
 void print(Object* data) {
     std::cout << data->toString() << std::endl;
 }"""

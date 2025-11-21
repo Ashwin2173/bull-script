@@ -109,7 +109,8 @@ class Compiler:
         self.builder.add(default.INTEGER)
         self.builder.add(default.STRING)
         self.builder.add(default.DOUBLE)
-        self.builder.add(default.PRINT)
+        self.builder.add(default.DEFAULT_TYPE_POST_FUNCTION)
+        self.builder.add(default.DEFAULT_FUNCTIONS)
 
     def __add_default_tracked(self):
         for item in self.defaults_tracker:
