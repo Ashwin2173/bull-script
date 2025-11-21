@@ -17,6 +17,18 @@ class Object {
       std::cout << "Invalid usage of + for " << getType() << " and " << rightHand->getType() << std::endl;
       std::exit(1);
     }
+    virtual Object* sub(Object* rightHand) {
+      std::cout << "Invalid usage of - for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* mul(Object* rightHand) {
+      std::cout << "Invalid usage of * for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* div(Object* rightHand) {
+      std::cout << "Invalid usage of / for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
     virtual std::vector<Object*> getIterable() {
       std::cout << this->type + " is not iterable" << std::endl;
       std::exit(1);
@@ -30,6 +42,9 @@ class Integer : BASE_CLASS {
     Integer(long long value) : value(value) { Object::setType("Integer"); }
     std::string toString() { return std::to_string(this->value); }
     Object* add(Object*) override;
+    Object* sub(Object*) override;
+    Object* mul(Object*) override;
+    Object* div(Object*) override;
 };"""
 DOUBLE = """
 class Double : BASE_CLASS {
@@ -38,6 +53,9 @@ class Double : BASE_CLASS {
     Double(long double value) : value(value) { Object::setType("Double"); }
     std::string toString() { return std::to_string(value); }
     Object* add(Object*) override;
+    Object* sub(Object*) override;
+    Object* mul(Object*) override;
+    Object* div(Object*) override;
 };"""
 STRING = """
 class String : BASE_CLASS {
@@ -77,7 +95,56 @@ Object* Double::add(Object* other) {
         return new Double(value + obj->value);
     }
     return Object::add(other);
-}"""
+}
+Object* Integer::sub(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Integer(value - obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value - obj->value);
+    }
+    return Object::sub(other);
+}
+Object* Double::sub(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Double(value - obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value - obj->value);
+    }
+    return Object::sub(other);
+}
+Object* Integer::mul(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Integer(value * obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value * obj->value);
+    }
+    return Object::mul(other);
+}
+Object* Double::mul(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Double(value * obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value * obj->value);
+    }
+    return Object::mul(other);
+}
+Object* Integer::div(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Integer(value / obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value / obj->value);
+    }
+    return Object::div(other);
+}
+Object* Double::div(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Double(value / obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Double(value / obj->value);
+    }
+    return Object::div(other);
+}
+"""
 DEFAULT_FUNCTIONS = """
 void print(Object* data) {
     std::cout << data->toString() << std::endl;

@@ -1,8 +1,4 @@
-define test() {
-    return 10;
-}
-
 define main() {
-    print(test() + 1); // output: 11
+    print(10 / 3.0);
     return 0;
 }

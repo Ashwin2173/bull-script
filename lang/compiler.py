@@ -83,7 +83,10 @@ class Compiler:
 
     def __process_binary_statement(self, expression):
         operation_map = {
-            TokenType.PLUS: '->add'
+            TokenType.PLUS:  '->add',
+            TokenType.MINUS: '->sub',
+            TokenType.STAR:  '->mul',
+            TokenType.SLASH: '->div',
         }
         return (self.__process_expression(expression.get_left()) +
                 operation_map[expression.get_operation()] + "(" +
