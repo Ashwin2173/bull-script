@@ -112,7 +112,7 @@ class Parser:
             token = self.tokens.get()
             self.tokens.next()
             right_expression = self.__comparison()
-            left_expression = BinaryExpression(left_expression, token.get_raw(),
+            left_expression = BinaryExpression(left_expression, token.get_type(),
                                     right_expression, StatementType.BINARY_EXPRESSION, token.get_line())
         return left_expression
 

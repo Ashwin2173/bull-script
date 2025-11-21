@@ -89,6 +89,10 @@ class Compiler:
             TokenType.MINUS: '->sub',
             TokenType.STAR:  '->mul',
             TokenType.SLASH: '->div',
+            TokenType.GREATER: '->grt',
+            TokenType.GREATER_EQUAL: '->gre',
+            TokenType.LESSER: '->lsr',
+            TokenType.LESSER_EQUAL: '->lse',
             TokenType.EQUAL_EQUAL: '->equals'
         }
         return (self.__process_expression(expression.get_left()) +

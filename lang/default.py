@@ -29,10 +29,23 @@ class Object {
       std::cout << "Invalid usage of / for " << getType() << " and " << rightHand->getType() << std::endl;
       std::exit(1);
     }
-    virtual Object* equals(Object* rightHand) {
-      std::cout << "Invalid usage of = for " << getType() << " and " << rightHand->getType() << std::endl;
+    virtual Object* grt(Object* rightHand) {
+      std::cout << "Invalid usage of > for " << getType() << " and " << rightHand->getType() << std::endl;
       std::exit(1);
     }
+    virtual Object* gre(Object* rightHand) {
+      std::cout << "Invalid usage of >= for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* lsr(Object* rightHand) {
+      std::cout << "Invalid usage of < for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* lse(Object* rightHand) {
+      std::cout << "Invalid usage of <= for " << getType() << " and " << rightHand->getType() << std::endl;
+      std::exit(1);
+    }
+    virtual Object* equals(Object* rightHand);
     virtual Object* negate() {
       std::cout << "Can't negate " << getType() << std::endl;
       std::exit(1);
@@ -54,6 +67,11 @@ class Integer : BASE_CLASS {
     Object* sub(Object*) override;
     Object* mul(Object*) override;
     Object* div(Object*) override;
+    Object* grt(Object*) override;
+    Object* gre(Object*) override;
+    Object* lsr(Object*) override;
+    Object* lse(Object*) override;
+    Object* equals(Object*) override;
 };"""
 DOUBLE = """
 class Double : BASE_CLASS {
@@ -66,6 +84,11 @@ class Double : BASE_CLASS {
     Object* sub(Object*) override;
     Object* mul(Object*) override;
     Object* div(Object*) override;
+    Object* grt(Object*) override;
+    Object* gre(Object*) override;
+    Object* lsr(Object*) override;
+    Object* lse(Object*) override;
+    Object* equals(Object*) override;
 };"""
 STRING = """
 class String : BASE_CLASS {
@@ -74,6 +97,7 @@ class String : BASE_CLASS {
     String(std::string value) : value(value) { Object::setType("String"); }
     std::string toString() { return this->value; }
     Object* add(Object*) override;
+    Object* equals(Object*) override;
 };"""
 BOOLEAN = """
 class Boolean : BASE_CLASS {
@@ -81,7 +105,9 @@ class Boolean : BASE_CLASS {
     bool value;
     Boolean(bool value) : value(value) { Object:: setType("Boolean"); }
     std::string toString() { return value ? "true" : "false"; }
-};"""
+    Object* equals(Object* other) override;
+};
+Object* Object::equals(Object* other) { return new Boolean(false); }"""
 DEFAULT_TYPE_POST_FUNCTION = """
 Object* String::add(Object* other) { 
     if (auto obj = dynamic_cast<String*>(other)) {
@@ -161,10 +187,101 @@ Object* Double::div(Object* other) {
     }
     return Object::div(other);
 }
+Object* Integer::grt(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value > obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value > obj->value);
+    }
+    return Object::div(other);
+}
+Object* Double::grt(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value > obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value > obj->value);
+    }
+    return Object::div(other);
+}
+Object* Integer::gre(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value >= obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value >= obj->value);
+    }
+    return Object::div(other);
+}
+Object* Double::gre(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value >= obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value >= obj->value);
+    }
+    return Object::div(other);
+}
+Object* Integer::lsr(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value < obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value < obj->value);
+    }
+    return Object::div(other);
+}
+Object* Double::lsr(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value < obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value < obj->value);
+    }
+    return Object::div(other);
+}
+Object* Integer::lse(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value <= obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value <= obj->value);
+    }
+    return Object::div(other);
+}
+Object* Double::lse(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value <= obj->value);
+    } else if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value <= obj->value);
+    }
+    return Object::div(other);
+}
+Object* String::equals(Object* other) {
+    if (auto obj = dynamic_cast<String*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::equals(other);
+}
+Object* Double::equals(Object* other) {
+    if (auto obj = dynamic_cast<Double*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::equals(other);
+}
+Object* Integer::equals(Object* other) {
+    if (auto obj = dynamic_cast<Integer*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::equals(other);
+}
+Object* Boolean::equals(Object* other) {
+    if (auto obj = dynamic_cast<Boolean*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::equals(other);
+}
 """
 DEFAULT_FUNCTIONS = """
 void print(Object* data) {
     std::cout << data->toString() << std::endl;
+}
+Object* type(Object* data) {
+    return new String(data->getType());
 }"""
 MAIN_FUNCTION = """
 int main() {
