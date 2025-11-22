@@ -35,6 +35,8 @@ class Parser:
             return statement
         elif token.get_type() == TokenType.KW_IF:
             return self.__if_statement()
+        elif token.get_type() == TokenType.KW_WHILE:
+            return self.__while_statement()
         else:
             expression = self.__expression()
             self.tokens.get().match(TokenType.SEMICOLON)
@@ -72,6 +74,12 @@ class Parser:
         test = self.__logical_or()
         consequent = self.__parse_block()
         return IfStatement(test, consequent, None, StatementType.IF_STATEMENT, test.get_line())
+
+    def __while_statement(self):
+        self.tokens.next()
+        test = self.__logical_or()
+        body = self.__parse_block()
+        return WhileStatement(test, body, StatementType.WHILE_STATEMENT, test.get_line())
 
     def __return_statement(self):
         self.tokens.next()

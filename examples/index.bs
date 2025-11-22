@@ -1,10 +1,9 @@
 define main() {
-    var x = 10;
-    if x == 10 {
-        print("yes yes yes");
+    var startTime = now();
+    var x = 0;
+    while x <= 100000000 {
+        x = x + 1;
     }
-    if x < 5 {
-        print("no no no");
-    }
-    return 69;
+    print(now() - startTime);
+    return 0;
 }

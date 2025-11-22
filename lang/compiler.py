@@ -1,5 +1,4 @@
 import sys
-from xml.dom.pulldom import START_ELEMENT
 
 from utils.builder import ProgramBuilder
 from utils.statement_type import StatementType
@@ -48,12 +47,21 @@ class Compiler:
                 self.__process_variable_declaration(statement)
             elif statement.get_type() == StatementType.IF_STATEMENT:
                 self.__process_if_statement(statement)
+            elif statement.get_type() == StatementType.WHILE_STATEMENT:
+                self.__process_while_statement(statement)
             elif statement.get_type() == StatementType.EXPRESSION_STATEMENT:
                 self.builder.add(self.__process_expression(statement))
                 self.builder.add(";")
             else:
                 print("[ERROR] unhandled statement")
                 sys.exit(1)
+
+    def __process_while_statement(self, statement):
+        self.builder.add("while(dynamic_cast<Boolean*>(")
+        self.builder.add(self.__process_expression(statement.get_test()))
+        self.builder.add(")->value){")
+        self.__process_statements(statement.get_body())
+        self.builder.add("}")
 
     def __process_if_statement(self, statement):
         self.builder.add("if(dynamic_cast<Boolean*>(")

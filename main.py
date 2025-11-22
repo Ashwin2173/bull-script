@@ -34,11 +34,11 @@ def transpile(program):
     with open("out.cpp", 'w') as file:
         file.write(str(compiler.compile()))
     import os
-    compile_return_code = os.system("g++ out.cpp")
-    os.system("del out.cpp")
+    compile_return_code = os.system("g++ -O3 out.cpp")
+    # os.system("del out.cpp")
     if compile_return_code == 0:
         os.system("a")
-        os.system("del a.exe")
+        # os.system("del a.exe")
 
 if __name__ == "__main__":
     main(sys.argv)

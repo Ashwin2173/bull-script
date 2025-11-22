@@ -1,5 +1,5 @@
 VERSION = 1
-INCLUDES = ["iostream", "vector"]
+INCLUDES = ["iostream", "vector", "chrono"]
 OBJECT = """
 #define BASE_CLASS virtual public Object
 class Object {
@@ -310,6 +310,9 @@ void print(Object* data) {
 }
 Object* type(Object* data) {
     return new String(data->getType());
+}
+Object* now() {
+    return new Double(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
 }"""
 MAIN_FUNCTION = """
 int main() {

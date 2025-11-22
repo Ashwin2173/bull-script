@@ -108,6 +108,18 @@ class IfStatement(BaseClass):
     def get_alternate(self):
         return self.alternate
 
+class WhileStatement(BaseClass):
+    def __init__(self, test, body, _type, line):
+        self.test = test
+        self.body = body
+        super().__init__(_type, line)
+
+    def get_test(self):
+        return self.test
+
+    def get_body(self):
+        return self.body
+
 class FunctionDeclaration(BaseClass):
     def __init__(self, name, body, _type, line):
         self.name = name
