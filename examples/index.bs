@@ -1,4 +1,10 @@
 define main() {
-    print(1 <= 1.2);
-    return 0;
+    var x = 10;
+    if x == 10 {
+        print("yes yes yes");
+    }
+    if x < 5 {
+        print("no no no");
+    }
+    return 69;
 }

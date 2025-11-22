@@ -81,7 +81,8 @@ class Lexer:
             'return': TokenType.KW_RETURN,
             'true': TokenType.KW_TRUE,
             'false': TokenType.KW_FALSE,
-            'var': TokenType.KW_VAR
+            'var': TokenType.KW_VAR,
+            'if': TokenType.KW_IF
         }
         keyword_type = keyword_map.get(raw_chunk)
         if keyword_type is not None:

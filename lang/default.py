@@ -106,6 +106,10 @@ class Boolean : BASE_CLASS {
     Boolean(bool value) : value(value) { Object:: setType("Boolean"); }
     std::string toString() { return value ? "true" : "false"; }
     Object* equals(Object* other) override;
+    Object* grt(Object*) override;
+    Object* gre(Object*) override;
+    Object* lsr(Object*) override;
+    Object* lse(Object*) override;
 };
 Object* Object::equals(Object* other) { return new Boolean(false); }"""
 DEFAULT_TYPE_POST_FUNCTION = """
@@ -249,6 +253,30 @@ Object* Double::lse(Object* other) {
     } else if (auto obj = dynamic_cast<Double*>(other)) {
         return new Boolean(value <= obj->value);
     }
+    return Object::div(other);
+}
+Object* Boolean::gre(Object* other) {
+    if (auto obj = dynamic_cast<Boolean*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::div(other);
+}
+Object* Boolean::grt(Object* other) {
+    if (auto obj = dynamic_cast<Boolean*>(other)) {
+        return new Boolean(false);
+    } 
+    return Object::div(other);
+}
+Object* Boolean::lse(Object* other) {
+    if (auto obj = dynamic_cast<Boolean*>(other)) {
+        return new Boolean(value == obj->value);
+    } 
+    return Object::div(other);
+}
+Object* Boolean::lsr(Object* other) {
+    if (auto obj = dynamic_cast<Boolean*>(other)) {
+        return new Boolean(false);
+    } 
     return Object::div(other);
 }
 Object* String::equals(Object* other) {

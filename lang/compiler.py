@@ -37,17 +37,29 @@ class Compiler:
         name = definition.get_name()
         name = "main_" if name == "main" else name
         self.builder.add(f"Object* {name}() {{")
-        for statement in definition.get_body():
+        self.__process_statements(definition.get_body())
+        self.builder.add("}")
+
+    def __process_statements(self, statement_list):
+        for statement in statement_list:
             if statement.get_type() == StatementType.RETURN_STATEMENT:
                 self.__process_return_statement(statement)
             elif statement.get_type() == StatementType.VARIABLE_EXPRESSION:
                 self.__process_variable_declaration(statement)
+            elif statement.get_type() == StatementType.IF_STATEMENT:
+                self.__process_if_statement(statement)
             elif statement.get_type() == StatementType.EXPRESSION_STATEMENT:
                 self.builder.add(self.__process_expression(statement))
                 self.builder.add(";")
             else:
                 print("[ERROR] unhandled statement")
                 sys.exit(1)
+
+    def __process_if_statement(self, statement):
+        self.builder.add("if(dynamic_cast<Boolean*>(")
+        self.builder.add(self.__process_expression(statement.get_test()))
+        self.builder.add(")->value){")
+        self.__process_statements(statement.get_consequent())
         self.builder.add("}")
 
     def __process_variable_declaration(self, statement):
@@ -93,7 +105,8 @@ class Compiler:
             TokenType.GREATER_EQUAL: '->gre',
             TokenType.LESSER: '->lsr',
             TokenType.LESSER_EQUAL: '->lse',
-            TokenType.EQUAL_EQUAL: '->equals'
+            TokenType.EQUAL_EQUAL: '->equals',
+            TokenType.EQUAL: ' = '
         }
         return (self.__process_expression(expression.get_left()) +
                 operation_map[expression.get_operation()] + "(" +

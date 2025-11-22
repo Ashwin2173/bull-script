@@ -33,6 +33,8 @@ class Parser:
             statement = self.__var_statement()
             self.tokens.get().match(TokenType.SEMICOLON)
             return statement
+        elif token.get_type() == TokenType.KW_IF:
+            return self.__if_statement()
         else:
             expression = self.__expression()
             self.tokens.get().match(TokenType.SEMICOLON)
@@ -65,6 +67,12 @@ class Parser:
         expression = self.__logical_or()
         return VariableDeclaration(name.get_raw(), expression, StatementType.VARIABLE_EXPRESSION, name.get_line())
 
+    def __if_statement(self):
+        self.tokens.next()
+        test = self.__logical_or()
+        consequent = self.__parse_block()
+        return IfStatement(test, consequent, None, StatementType.IF_STATEMENT, test.get_line())
+
     def __return_statement(self):
         self.tokens.next()
         expression = self.__expression()
@@ -82,7 +90,7 @@ class Parser:
             right_expression = self.__logical_or()
             if left_expression.get_type() != StatementType.ID:
                 raise BullException("cannot assign to an expression")
-            left_expression = BinaryExpression(left_expression, token.get_raw(),
+            left_expression = BinaryExpression(left_expression, token.get_type(),
                                     right_expression, StatementType.BINARY_EXPRESSION, token.get_line())
         return left_expression
 
@@ -92,7 +100,7 @@ class Parser:
             token = self.tokens.get()
             self.tokens.next()
             right_expression = self.__logical_and()
-            left_expression = BinaryExpression(left_expression, token.get_raw(),
+            left_expression = BinaryExpression(left_expression, token.get_type(),
                                     right_expression, StatementType.BINARY_EXPRESSION, token.get_line())
         return left_expression
 
@@ -102,7 +110,7 @@ class Parser:
             token = self.tokens.get()
             self.tokens.next()
             right_expression = self.__equality()
-            left_expression = BinaryExpression(left_expression, token.get_raw(),
+            left_expression = BinaryExpression(left_expression, token.get_type(),
                                     right_expression, StatementType.BINARY_EXPRESSION, token.get_line())
         return left_expression
 

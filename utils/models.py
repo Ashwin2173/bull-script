@@ -92,6 +92,22 @@ class ReturnStatement(BaseClass):
     def get_expression(self):
         return self.expression
 
+class IfStatement(BaseClass):
+    def __init__(self, test, consequent, alternate, _type, line):
+        self.test = test
+        self.consequent = consequent
+        self.alternate = alternate
+        super().__init__(_type, line)
+
+    def get_test(self):
+        return self.test
+
+    def get_consequent(self):
+        return self.consequent
+
+    def get_alternate(self):
+        return self.alternate
+
 class FunctionDeclaration(BaseClass):
     def __init__(self, name, body, _type, line):
         self.name = name
