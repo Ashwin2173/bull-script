@@ -1,5 +1,5 @@
 VERSION = 1
-INCLUDES = ["iostream", "vector", "chrono"]
+INCLUDES = ["iostream", "vector", "chrono", "unordered_map"]
 OBJECT = """
 #define BASE_CLASS virtual public Object
 class Object {
@@ -72,7 +72,7 @@ class Integer : BASE_CLASS {
     Object* lsr(Object*) override;
     Object* lse(Object*) override;
     Object* equals(Object*) override;
-};"""
+};static std::unordered_map<long long, Integer*> INTEGER_POOL;"""
 DOUBLE = """
 class Double : BASE_CLASS {
     public:
@@ -89,7 +89,8 @@ class Double : BASE_CLASS {
     Object* lsr(Object*) override;
     Object* lse(Object*) override;
     Object* equals(Object*) override;
-};"""
+};static std::unordered_map<long double, Double*> DOUBLE_POOL;
+"""
 STRING = """
 class String : BASE_CLASS {
     public:
@@ -98,7 +99,8 @@ class String : BASE_CLASS {
     std::string toString() { return this->value; }
     Object* add(Object*) override;
     Object* equals(Object*) override;
-};"""
+};static std::unordered_map<std::string, String*> STRING_POOL;
+"""
 BOOLEAN = """
 class Boolean : BASE_CLASS {
     public:
@@ -111,8 +113,31 @@ class Boolean : BASE_CLASS {
     Object* lsr(Object*) override;
     Object* lse(Object*) override;
 };
-Object* Object::equals(Object* other) { return new Boolean(false); }"""
+Object* Object::equals(Object* other) { return new Boolean(false); }
+static Boolean* TRUE = new Boolean(true);
+static Boolean* FALSE = new Boolean(false);"""
 DEFAULT_TYPE_POST_FUNCTION = """
+Integer* get_int(long long v) {
+    auto it = INTEGER_POOL.find(v);
+    if (it != INTEGER_POOL.end()) return it->second;
+    Integer* obj = new Integer(v);
+    INTEGER_POOL.emplace(v, obj);
+    return obj;
+}
+Double* get_double(long double v) {
+    auto it = DOUBLE_POOL.find(v);
+    if (it != DOUBLE_POOL.end()) return it->second;
+    Double* obj = new Double(v);
+    DOUBLE_POOL.emplace(v, obj);
+    return obj;
+}
+String* get_string(const std::string& s) {
+    auto it = STRING_POOL.find(s);
+    if (it != STRING_POOL.end()) return it->second;
+    String* obj = new String(s);
+    STRING_POOL.emplace(s, obj);
+    return obj;
+}
 Object* String::add(Object* other) { 
     if (auto obj = dynamic_cast<String*>(other)) {
         return new String(value + obj->value);

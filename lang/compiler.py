@@ -129,13 +129,13 @@ class Compiler:
 
     def __process_literal(self, expression):
         if expression.get_type() == StatementType.INTEGER_LITERAL:
-            return f"(new Integer({expression.get_value()}LL))"
+            return f"get_int({expression.get_value()}LL)"
         elif expression.get_type() == StatementType.STRING_LITERAL:
-            return f"(new String({expression.get_value()}))"
+            return f"get_string({expression.get_value()})"
         elif expression.get_type() == StatementType.DOUBLE_LITERAL:
-            return f"(new Double({expression.get_value()}L))"
+            return f"get_double({expression.get_value()}L)"
         elif expression.get_type() == StatementType.BOOLEAN_LITERAL:
-            return f"(new Boolean({expression.get_value()}))"
+            return 'TRUE' if expression.get_value() == 'true' else 'FALSE'
         elif expression.get_type() == StatementType.ID:
             return expression.get_value()
         else:
